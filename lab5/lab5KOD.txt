@@ -1,0 +1,92 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace lab5
+{
+    public partial class Form1 : Form
+    {
+        private Color k;
+        private static float gamma = 1;
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                pictureBox1.Load(openFileDialog1.FileName);
+                int szer = pictureBox1.Image.Width;
+                int wys = pictureBox1.Image.Height;
+                pictureBox2.Image = new Bitmap(szer, wys);
+            }
+        }
+
+        //Kontrast
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            trackBar2.Minimum = 0;
+            trackBar2.Maximum = 255;
+            label5.Text = trackBar2.Value.ToString();
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            pictureBox2.Image = Kontrast(b1, trackBar2.Value);
+        }
+
+        public static Bitmap Kontrast(Bitmap Image, int Value)
+        {
+            Bitmap b1 = Image;
+            float contrast = 0.04f * Value;
+            Bitmap b2 = new Bitmap(b1.Width, b1.Height);
+            Graphics g = Graphics.FromImage(b2);
+            ImageAttributes Attributes = new ImageAttributes();
+
+            ColorMatrix cm = new ColorMatrix(new float[][]
+            {
+                new float[] {contrast,0f,0f,0f,0f},
+                new float[] {0f,contrast,0f,0f,0f},
+                new float[] {0f,0f,contrast,0f,0f},
+                new float[] {0f,0f,0f,1f,0f},
+                new float[] {0.001f, 0.001f, 0.001f, 0f, 1f}});
+
+            Attributes.SetColorMatrix(cm);
+            g.DrawImage(b1, new Rectangle(0, 0, b1.Width, b1.Height), 0, 0, b1.Width, b1.Height, GraphicsUnit.Pixel, Attributes);
+            Attributes.Dispose();
+            g.Dispose();
+            return b2;
+        }
+
+
+        //Gamma
+        private void trackBar3_Scroll(object sender, EventArgs e)
+        {
+            trackBar3.Minimum = 1;
+            trackBar3.Maximum = 255;
+            label6.Text = trackBar3.Value.ToString();
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            pictureBox2.Image = Gamma(b1, trackBar3.Value);
+        }
+
+        public static Bitmap Gamma(Bitmap Image, int Value)
+        {
+            Bitmap b1 = Image;
+            gamma = 0.04f * Value;
+            Bitmap b2 = new Bitmap(b1.Width, b1.Height);
+            Graphics g = Graphics.FromImage(b2);
+            ImageAttributes Attributes = new ImageAttributes();
+            Attributes.SetGamma(gamma);
+            g.DrawImage(b1, new Rectangle(0, 0, b1.Width, b1.Height), 0, 0, b1.Width, b1.Height, GraphicsUnit.Pixel, Attributes);
+            Attributes.Dispose();
+            g.Dispose();
+            return b2;
+        }
+    }
+}

@@ -1,0 +1,98 @@
+using System;
+using System.Drawing;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms;
+
+namespace lab20200302
+{
+    public partial class Form1 : Form
+    {
+        //serializacja
+        public Dane dane = new Dane();
+        private Color k1, k2, k3, k4, k5, k6, k7, k8, k9;
+        private int r, g, b, sum;
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                pictureBox1.Load(openFileDialog1.FileName);
+                dane.szer = pictureBox1.Image.Width;
+                dane.wys = pictureBox1.Image.Height;
+                pictureBox2.Image = new Bitmap(dane.szer, dane.wys);
+            }
+        }
+
+        //maska 3x3
+        private void button11_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+	    int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+
+            int m1 = Convert.ToInt32(numericUpDown3.Value);
+            int m2 = Convert.ToInt32(numericUpDown4.Value);
+            int m3 = Convert.ToInt32(numericUpDown5.Value);
+            int m4 = Convert.ToInt32(numericUpDown6.Value);
+            int m5 = Convert.ToInt32(numericUpDown7.Value);
+            int m6 = Convert.ToInt32(numericUpDown8.Value);
+            int m7 = Convert.ToInt32(numericUpDown9.Value);
+            int m8 = Convert.ToInt32(numericUpDown10.Value);
+            int m9 = Convert.ToInt32(numericUpDown11.Value);
+            sum = m1+m2+m3+m4+m5+m6+m7+m8+m9;
+
+            //odcinam krawędzie
+            for (int x = 1; x < szer-1; x++)
+            {
+                for (int y = 1; y < wys-1; y++)
+                {
+                    //pobieranie wartości pixela dla maski 3x3
+                    k1 = b1.GetPixel(x - 1, y - 1);
+                    k2 = b1.GetPixel(x, y - 1);
+                    k3 = b1.GetPixel(x + 1, y - 1);
+                    k4 = b1.GetPixel(x - 1, y);
+                    k5 = b1.GetPixel(x, y);
+                    k6 = b1.GetPixel(x + 1, y);
+                    k7 = b1.GetPixel(x - 1, y + 1);
+                    k8 = b1.GetPixel(x, y + 1);
+                    k9 = b1.GetPixel(x + 1, y + 1);
+
+                    r = k1.R * m1 + k2.R * m2 + k3.R * m3 + k4.R * m4 + k5.R * m5 + k6.R * m6 + k7.R * m7 + k8.R * m8 + k9.R * m9;
+                    g = k1.G * m1 + k2.G * m2 + k3.G * m3 + k4.G * m4 + k5.G * m5 + k6.G * m6 + k7.G * m7 + k8.G * m8 + k9.G * m9;
+                    b = k1.B * m1 + k2.B * m2 + k3.B * m3 + k4.B * m4 + k5.B * m5 + k6.B * m6 + k7.B * m7 + k8.B * m8 + k9.B * m9;
+
+                    //normowanie
+                    if (sum != 0) r /= sum;
+                    if (sum != 0) g /= sum;
+                    if (sum != 0) b /= sum;
+
+                    //obcinanie
+                    if (r > 255) r = 255;
+                    if (r < 0) r = 0;
+                    if (g > 255) g = 255;
+                    if (g < 0) g = 0;
+                    if (b > 255) b = 255;
+                    if (b < 0) b = 0;
+
+
+                    //ustawianie nowych wartosci dla pixeli
+                    b2.SetPixel(x, y, Color.FromArgb(r, g, b));
+                }
+            }
+            pictureBox2.Refresh();
+        }
+
+    }
+}

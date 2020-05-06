@@ -1,0 +1,485 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace lab4
+{
+    public partial class Form1 : Form
+    {
+        Color k1, k2;
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                pictureBox1.Load(openFileDialog1.FileName);
+                int szer = pictureBox1.Image.Width;
+                int wys = pictureBox1.Image.Height;
+                pictureBox3.Image = new Bitmap(szer, wys);
+
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog2.ShowDialog() == DialogResult.OK)
+            {
+                pictureBox2.Load(openFileDialog2.FileName);
+            }
+        }
+
+        //suma
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+                    int sumaR = k1.R + k2.R;
+                    int sumaG = k1.G + k2.G;
+                    int sumaB = k1.B + k2.B;
+                    if (sumaR > 255) sumaR = 255;
+                    if (sumaG > 255) sumaG = 255;
+                    if (sumaB > 255) sumaB = 255;
+                    b3.SetPixel(x, y, Color.FromArgb(sumaR, sumaG, sumaB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+        //Odejmowanie
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+                    int resultR = k1.R + k2.R - 255;
+                    int resultG = k1.G + k2.G - 255;
+                    int resultB = k1.B + k2.B - 255;
+                    if (resultR < 0) resultR = 0;
+                    if (resultG < 0) resultG = 0;
+                    if (resultB < 0) resultB = 0;
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+        //Roznica
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+                    int resultR = Math.Abs(k1.R - k2.R);
+                    int resultG = Math.Abs(k1.G - k2.G);
+                    int resultB = Math.Abs(k1.B - k2.B);
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+        //Mnozenie
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+                    int resultR = (k1.R * k2.R) / 255;
+                    int resultG = (k1.G * k2.G) / 255;
+                    int resultB = (k1.B * k2.B) / 255;
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+        //Mnozenie odwrotnosci
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+                    int resultR = 255 - ((255 - k1.R) * (255 - k2.R) / 255);
+                    int resultG = 255 - ((255 - k1.G) * (255 - k2.G) / 255);
+                    int resultB = 255 - ((255 - k1.B) * (255 - k2.B) / 255);
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+        //Negacja
+        private void button8_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+                    int resultR = 255 - Math.Abs(255 - k1.R - k2.R);
+                    int resultG = 255 - Math.Abs(255 - k1.G - k2.G);
+                    int resultB = 255 - Math.Abs(255 - k1.B - k2.B);
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+        //Ciemniejsze
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+            int resultR, resultG, resultB;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+                    if (k1.R < k2.R) resultR = k1.R;
+                    else resultR = k2.R;
+                    if (k1.G < k2.G) resultG = k1.G;
+                    else resultG = k2.G;
+                    if (k1.B < k2.B) resultB = k1.B;
+                    else resultB = k2.B;
+
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+        //Jasniejsze
+        private void button10_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+            int resultR, resultG, resultB;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+                    if (k1.R > k2.R) resultR = k1.R;
+                    else resultR = k2.R;
+                    if (k1.G > k2.G) resultG = k1.G;
+                    else resultG = k2.G;
+                    if (k1.B > k2.B) resultB = k1.B;
+                    else resultB = k2.B;
+
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+        //Wyłączenie
+        private void button11_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+            int resultR, resultG, resultB;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+                    resultR = k1.R + k2.R - ((2 * k1.R * k2.R) / 255);
+                    resultG = k1.G + k2.G - ((2 * k1.G * k2.G) / 255);
+                    resultB = k1.B + k2.B - ((2 * k1.B * k2.B) / 255);
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+
+        //Nakładka
+        private void button12_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+            int resultR, resultG, resultB;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+                    if (k1.R < 128) resultR = (2 * k1.R * k2.R) / 255;
+                    else resultR = 255 - ((2 * (255 - k1.R) * (255 - k2.R)) / 255);
+                    if (k1.G < 128) resultG = (2 * k1.G * k2.G) / 255;
+                    else resultG = 255 - ((2 * (255 - k1.G) * (255 - k2.G)) / 255);
+                    if (k1.B < 128) resultB = (2 * k1.B * k2.B) / 255;
+                    else resultB = 255 - ((2 * (255 - k1.B) * (255 - k2.B)) / 255);
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+        //ostre swiatlo
+        private void button13_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+            int resultR, resultG, resultB;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+                    if (k2.R < 128) resultR = (2 * k1.R * k2.R) / 255;
+                    else resultR = 255 - ((2 * (255 - k1.R) * (255 - k2.R)) / 255);
+                    if (k2.G < 128) resultG = (2 * k1.G * k2.G) / 255;
+                    else resultG = 255 - ((2 * (255 - k1.G) * (255 - k2.G)) / 255);
+                    if (k2.B < 128) resultB = (2 * k1.B * k2.B) / 255;
+                    else resultB = 255 - ((2 * (255 - k1.B) * (255 - k2.B)) / 255);
+
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+        //lagodne swiatlo
+        private void button14_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+            int resultR, resultG, resultB;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+                    if (k2.R < 128) resultR = (2 * k1.R * k2.R) / 255 + (((k1.R * k1.R) / 255) * (255 - 2 * k2.R)) / 255;
+                    else resultR = (k1.R * (2 * k2.R - 255)) / 255 + ((2 * k1.R) * (255 - k2.R)) / 255;
+                    if (k2.G < 128) resultG = (2 * k1.G * k2.G) / 255 + (((k1.G * k1.G) / 255) * (255 - 2 * k2.G)) / 255;
+                    else resultG = (k1.G * (2 * k2.G - 255)) / 255 + ((2 * k1.G) * (255 - k2.G)) / 255;
+                    if (k2.B < 128) resultB = (2 * k1.B * k2.B) / 255 + (((k1.B * k1.B) / 255) * (255 - 2 * k2.B)) / 255;
+                    else resultB = (k1.B * (2 * k2.B - 255)) / 255  + ((2 * k1.B) * (255 - k2.B)) / 255;
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+
+        //Rozcięczenie
+        private void button15_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+            int resultR = 0, resultG = 0, resultB = 0;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+
+                    if (k1.R != 255 && k2.R > (255 - k1.R)) resultR = 255 - (((255 - k1.R) / k2.R) * 255);
+                    else if (k1.R == 255) resultR = k2.R;
+                    if (k1.G != 255 && k2.G > (255 - k1.G)) resultG = 255 - (((255 - k1.G) / k2.G) * 255);
+                    else if (k1.G == 255) resultG = k2.G;
+                    if (k1.B != 255 && k2.B > (255 - k1.B)) resultB = 255 - (((255 - k1.B) / k2.B) * 255);
+                    else if (k1.B == 255) resultB = k2.B;
+
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+        //wypalanie
+        private void button16_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+            int resultR, resultG, resultB;
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+
+                    if (k1.R + k2.R <= 255) resultR = 0;
+                    else resultR = k1.R + k2.R - 255;
+                    if (k1.G + k2.G <= 255) resultG = 0;
+                    else resultG = k1.G + k2.G - 255;
+                    if (k1.B + k2.B <= 255) resultB = 0;
+                    else resultB = k1.B + k2.B - 255;
+
+
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+
+        //reflect mode
+        private void button17_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+            int resultR, resultG, resultB;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+                    if (k2.R == 255) resultR = (((k1.R * k1.R) / 255) / 1);
+                    else resultR = (((k1.R * k1.R) / 255) / (255 - k2.R));
+
+                    if (k2.G == 255) resultG = (((k1.G * k1.G) / 255) / 1);
+                    else resultG = (((k1.G * k1.G) / 255) / (255 - k2.G));
+
+                    if (k2.B == 255) resultB = (((k1.B * k1.B) / 255) / 1);
+                    else resultB = (((k1.B * k1.B) / 255) / (255 - k2.B));
+
+
+
+
+
+
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+
+        //Przezroczystosc
+        private void button18_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            Bitmap b3 = (Bitmap)pictureBox3.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+            int resultR, resultG, resultB;
+            int alfa = Convert.ToInt32(numericUpDown1.Value);
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k1 = b1.GetPixel(x, y);
+                    k2 = b2.GetPixel(x, y);
+                    resultR = ((255 - alfa) * k2.R)/255 + (alfa * k1.R)/255;
+                    resultG = ((255 - alfa) * k2.G)/255 + (alfa * k1.G)/255;
+                    resultB = ((255 - alfa) * k2.B)/255 + (alfa * k1.B)/255;
+
+                    b3.SetPixel(x, y, Color.FromArgb(resultR, resultG, resultB));
+                }
+            }
+            pictureBox3.Refresh();
+        }
+    }
+}

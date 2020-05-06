@@ -1,0 +1,87 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace lab3
+{
+    public partial class Form1 : Form
+    {
+        private Color k;
+        private static float gamma = 1;
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                pictureBox1.Load(openFileDialog1.FileName);
+                int szer = pictureBox1.Image.Width;
+                int wys = pictureBox1.Image.Height;
+                pictureBox2.Image = new Bitmap(szer, wys);
+            }
+        }
+
+
+        //negatyw
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            Bitmap b2 = (Bitmap)pictureBox2.Image;
+            int szer = pictureBox1.Image.Width;
+            int wys = pictureBox1.Image.Height;
+
+            for (int x = 0; x < szer; x++)
+            {
+                for (int y = 0; y < wys; y++)
+                {
+                    k = b1.GetPixel(x, y);
+                    b2.SetPixel(x, y, Color.FromArgb(255-k.R, 255-k.G, 255-k.B));
+                }
+            }
+            pictureBox2.Refresh();
+        }
+
+
+        //Jasnosc
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            trackBar1.Minimum = -255;
+            trackBar1.Maximum = 255;
+            label2.Text = trackBar1.Value.ToString();
+            
+            Bitmap b1 = (Bitmap)pictureBox1.Image;
+            pictureBox2.Image = Rozjasnij(b1, trackBar1.Value);
+        }
+
+        public static Bitmap Rozjasnij(Bitmap Image, int Value)
+        {
+            Bitmap b1 = Image;
+            float FinalValue = (float)Value / 255.0f;
+            Bitmap b2 = new Bitmap(b1.Width, b1.Height);
+            Graphics g = Graphics.FromImage(b2);
+            ImageAttributes Attributes = new ImageAttributes();
+
+            ColorMatrix cm = new ColorMatrix(new float[][]
+            {
+                new float[] {1,0,0,0,0},
+                new float[] {0,1,0,0,0},
+                new float[] {0,0,1,0,0},
+                new float[] {0,0,0,1,0},
+                new float[] {FinalValue, FinalValue, FinalValue, 1, 1}});
+
+            Attributes.SetColorMatrix(cm);
+            g.DrawImage(b1, new Rectangle(0, 0, b1.Width, b1.Height), 0, 0, b1.Width, b1.Height, GraphicsUnit.Pixel, Attributes);
+            Attributes.Dispose();
+            g.Dispose();
+            return b2;
+        }
