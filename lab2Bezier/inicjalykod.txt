@@ -1,0 +1,28 @@
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace lab2_Bezier
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            Pen myPen = new Pen(Color.Red);
+            myPen.Width = 10;
+
+            g.DrawBezier(myPen, 150, 50, 130, 50, 130, 400, 150, 400);
+            g.DrawBezier(myPen, 148, 50, 400, 50, 400, 400, 148, 400);
+
+            g.DrawBezier(myPen, 450, 50, 430, 50, 430, 400, 450, 400);
+            g.DrawBezier(myPen, 448, 50, 700, 50, 700, 400, 448, 400);
+
+        }
+    }
+}
